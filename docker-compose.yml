@@ -1,0 +1,41 @@
+version: '2'
+services:
+  node:
+    image: node
+
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:latest
+    environment:
+        - RABBITMQ_DEFAULT_USER=admin
+        - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+        - "5672:5672"
+
+  db:
+    image: mysql:5.5
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE=ndb
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=nduser
+      - MYSQL_PASSWORD=ndpass
+    ports:
+      - "3306:3306"
+
+  web:
+    depends_on:
+      - db
+      - rabbit
+      - node
+
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+volumes:
+  db_data:
