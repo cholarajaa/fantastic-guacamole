@@ -9,5 +9,6 @@ run
 # set up django project
 run
   - docker-compose build
-  - docker-compose run web django-admin startproject notifier .
- 
+  - docker-compose run web python manage.py makemigrations notification
+  - docker-compose run web python manage.py migrate
+
