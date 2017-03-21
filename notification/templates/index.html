@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html >
+<head>
+  <title>Notification create form</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="{% static 'bower_components/angular-material/angular-material.min.css' %}"/>
+  <link href="https://fonts.googleapis.com/css?family=Titillium+Web:200,300,400,600,700" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'css/index.css' %}"/>
+  <link rel="stylesheet" href="{% static 'bower_components/angularjs-datetime-picker/angularjs-datetime-picker.css' %}"/>
+</head>
+<body ng-app="notifyApp" ng-controller="notifyController as nCtrl">  
+<div class="body-wrapper">
+  <!-- Header -->
+  <header class="ang-fixed-header">
+    <md-toolbar rb-scroll class="">
+      <div class="md-toolbar-tools header-toolbar-tools" layout layout-align="space-between center">
+            {% verbatim %}
+            {{nCtrl.message}}
+            {% endverbatim %}
+        <div class="logo">
+            <img src="{% static 'img/notification.png' %}">
+
+        </div>
+      </div>
+    </md-toolbar>
+  </header>
+  <input type="hidden" value="{{csrf_token}}" id="csrf_token">
+  <!-- angular form page  -->
+{% verbatim %}
+  <div layout="column" ng-cloak class="md-inline-form">
+          <md-content layout-padding md-whiteframe="2">
+            <div>
+              <form name="userForm" ng-submit='nCtrl.submit_form();'>
+                <div layout-gt-xs="row">
+                </div>
+
+                <div layout-gt-sm="row">
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Header</label>
+                    <input ng-model="nCtrl.header" minlength="20" md-maxlength="150" required>
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Content</label>
+                    <input ng-model="nCtrl.content" minlength="20" md-maxlength="150" required>
+                  </md-input-container>
+                </div>
+             
+                <md-input-container class="md-block">
+                  <label>Image URL</label>
+                  <input ng-model="nCtrl.image" md-maxlength="150" md-select-on-focus required></input>
+                </md-input-container>
+
+                <div layout-gt-sm="row">
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>time</label>
+                    <input ng-model="nCtrl.time" datetime-picker date-format="yyyy-MM-dd HH:mm:ss" />
+                    <!-- <input ng-model="nCtrl.time" required> -->
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Users</label>
+                    <md-select ng-model="nCtrl.user_ids" multiple="true">
+                      <md-option  ng-value="{{user.id}}" ng-repeat="user in nCtrl.user_list">
+                        {{user.username}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
+                </div>
+                <div layout layout-align="center center">
+                    <md-button type="submit" class="md-primary sbt-btn">SUBMIT</md-button> 
+                </div>
+
+              </form>
+            </div>
+          </md-content>
+     </div>
+    <!--  form  footer -->
+    <div layout="column" layout-align="center center" class="form-footer" flex>
+        <section layout layout-align="center center">
+            <span class="md-caption">© 2016 Madhu . | Terms and Conditions | Privacy Policy | Contact Us
+            </span>
+        </section>
+    </div>
+
+</div>
+{% endverbatim %}
+  <!-- Angular Material Dependencies -->
+  <script src="{% static 'bower_components/angular/angular.min.js' %}"></script>
+  <script src="{% static 'bower_components/angular-animate/angular-animate.min.js' %}"></script>
+  <script src="{% static 'bower_components/angular-aria/angular-aria.min.js' %}"></script>
+  <script src="{% static 'bower_components/angular-material/angular-material.min.js' %}"></script>
+  <script src="{% static 'bower_components/angular-material-icons/angular-material-icons.min.js' %}"></script>
+  <script src="{% static 'bower_components/angular-resource/angular-resource.min.js' %}"></script>
+  <script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+  <script src="{% static 'bower_components/angularjs-datetime-picker/angularjs-datetime-picker.min.js' %}"></script>  
+  <script src="{% static 'app/notify.module.js' %}"></script>
+  <script src="{% static 'app/notify.config.js' %}"></script>
+  <script src="{% static 'app/notify.controller.js' %}"></script>
+  <script src="{% static 'app/notify.factory.js' %}"></script>
+
+ </body>
+</html>

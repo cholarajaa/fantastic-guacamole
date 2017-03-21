@@ -24,7 +24,7 @@ class ViewTestCase(TestCase):
             'dispatch_time': dispatch_time
         }
         self.response = self.client.post(
-            reverse('create'),
+            reverse('notifications'),
             self.notification_data,
             format="json"
         )
