@@ -1,12 +1,13 @@
+import datetime
 from django.shortcuts import render
 from django.contrib.auth.models import User
 
-from rest_framework import generics, viewsets
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .serializers import NotificationSerializer, UserSerializer
-from .models import Notification
+from .tasks import send_notification
 
 
 class ListUsers(APIView):
@@ -38,7 +39,17 @@ class NotificationViewSet(viewsets.ViewSet):
         self.serializer = NotificationSerializer
 
     def post(self, request):
-        print request.data
+        send_at = datetime.datetime.strptime(
+            request.data['dispatch_time'], "%Y-%m-%d %H:%M:%S")
+        payload = {
+            'header': request.data['header'],
+            'content': request.data['content'],
+            'image_url': request.data['image_url']
+        }
+        send_notification.apply_async(
+            (request.data['user_ids'], payload),
+            eta=send_at
+        )
         serializer = self.serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

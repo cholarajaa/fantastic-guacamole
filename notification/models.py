@@ -4,11 +4,9 @@ import mimetypes
 import requests
 
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 
 
-# http://stackoverflow.com/questions/10543940/check-if-a-url-to-an-image-is-up-and-exists-in-python/10543969#10543969
 def image_validator(url):
     mimetype, encoding = mimetypes.guess_type(url)
     return (mimetype and mimetype.startswith('image'))

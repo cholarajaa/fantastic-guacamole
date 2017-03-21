@@ -25,6 +25,12 @@ services:
     ports:
       - "3306:3306"
 
+  celeryworker:
+    build: .
+    depends_on:
+      - rabbit
+    command: celery -A notifier worker -l INFO
+
   web:
     depends_on:
       - db

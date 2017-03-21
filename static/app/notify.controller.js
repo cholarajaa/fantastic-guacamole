@@ -14,18 +14,16 @@
     notifyFactory.users().query().$promise.then(function(response){
       nCtrl.user_list = response;
     })
-    function submit_form(){
-      angular.forEach(nCtrl.user_ids, function(element, index) {
-        var data = {
-          'header': nCtrl.header,
-          'content': nCtrl.content,
-          'image_url': nCtrl.image,
-          'dispatch_time': nCtrl.time,
-          'user': element
-        }
+    function submit_form(){      
+      var data = {
+        'header': nCtrl.header,
+        'content': nCtrl.content,
+        'image_url': nCtrl.image,
+        'dispatch_time': nCtrl.time,
+        'user_ids': nCtrl.user_ids
+      }
 
-        notifyFactory.notification().save(data);
-      });
+      notifyFactory.notification().save(data);
     }
   }
 })();
