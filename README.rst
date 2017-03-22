@@ -1,9 +1,10 @@
 **Runing guacamole project**
-*after cloning*
-*cd repository*
-**Install docker-compose**
-  - virtualenv dockercompose
-  - source dockercompose/env/bin/activate
+| *after cloning*
+| *cd repository*
+| 
+  **Install docker-compose**
+  - virtualenv dockerenv
+  - source dockerenv/bin/activate
   - pip install docker-compose
   
   **to set up javascript dependencies**
@@ -11,8 +12,10 @@
     - npm install
     - node_modules/bower/bin/bower install
 **set up django project**
+  - if in static folder: cd ..
   - docker-compose build
-  - docker-compose run web python manage.py makemigrations notification
+  - docker-compose up
+  - Ctrl-C
   - docker-compose run web python manage.py migrate
 
 **run django server with celery worker**
