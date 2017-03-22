@@ -1,6 +1,7 @@
 import datetime
 
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 from ..models import Notification
 
 
@@ -33,3 +34,26 @@ class NotificationTestCase(TestCase):
         self.notification.save()
         new_count = Notification.objects.count()
         self.assertNotEqual(old_count, new_count)
+
+
+    def test_model_validation_error_on_invalid_image_url(self):
+        try:
+            self.notification.image_url = 'asdf.dd'
+            self.notification.save()
+        except Exception as e:
+            self.assertEqual(
+                [u'must be valid image url, mimetype not image'],
+                e.messages
+            )
+
+
+    def test_model_validation_error_on_invalid_image_response(self):
+        try:
+            self.notification.image_url = 'https://stic.pexels.com/' +\
+                'photos/7720/night-animal-dog-pet.jpg'
+            self.notification.save()
+        except Exception as e:
+            self.assertEqual(
+                'must be valid image url, response not 2xx',
+                e.message
+            )

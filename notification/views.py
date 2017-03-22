@@ -39,20 +39,20 @@ class NotificationViewSet(viewsets.ViewSet):
         self.serializer = NotificationSerializer
 
     def post(self, request):
-        send_at = datetime.datetime.strptime(
-            request.data['dispatch_time'], "%Y-%m-%d %H:%M:%S")
-        payload = {
-            'header': request.data['header'],
-            'content': request.data['content'],
-            'image_url': request.data['image_url']
-        }
-        send_notification.apply_async(
-            (request.data['user_ids'], payload),
-            eta=send_at
-        )
         serializer = self.serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            send_at = datetime.datetime.strptime(
+                request.data['dispatch_time'], "%Y-%m-%d %H:%M:%S")
+            payload = {
+                'header': request.data['header'],
+                'content': request.data['content'],
+                'image_url': request.data['image_url']
+            }
+            send_notification.apply_async(
+                (request.data['user_ids'], payload),
+                eta=send_at
+            )
             return Response(serializer.data, status=201)
         else:
             return Response({}, status=400)
